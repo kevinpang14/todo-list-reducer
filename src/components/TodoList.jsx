@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteTodo,
-  toggleTodo,
-  toggleUpdate,
-} from "../redux/todos/todoAction";
+import { fetchTodos, deleteTodo } from "../redux/async/todos/todoAction";
 
 const TodoList = () => {
-  const todos = useSelector((state) => state.todoRed.todos);
+  const { todos, loading, error, isSuccess } = useSelector(
+    (state) => state.todoRed
+  );
   const dispatch = useDispatch();
 
-  const handleToggleUpdate = () => {
-    //dispatch
-  };
+  //get data first time
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, [dispatch]);
+
+  //if success then get data again
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(fetchTodos());
+    }
+  }, [isSuccess]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (todos.length === 0) {
+    return <div>No todos found.</div>;
+  }
 
   return (
     <ul className="list-group">

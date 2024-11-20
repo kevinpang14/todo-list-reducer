@@ -1,7 +1,8 @@
 // src/components/TodoInput.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo, updateTodo } from "../redux/todos/todoAction";
+import { addTodo } from "../redux/async/todos/todoAction";
+import { v4 as uuidv4 } from "uuid";
 
 const TodoInput = () => {
   const [text, setText] = useState("");
@@ -11,19 +12,19 @@ const TodoInput = () => {
   const todos = useSelector((state) => state.todoRed.todos);
 
   //get task id then the text to fill the input value
-  useEffect(() => {
-    console.log(updatingTrackID);
-    if (updatingTrackID) {
-      const taskToUpdate = todos.find((todo) => todo.id === updatingTrackID);
-      if (taskToUpdate) {
-        console.log("updating task to:", taskToUpdate.text);
-        setText(taskToUpdate.text);
-      }
-    } else {
-      // reset the input value
-      setText("");
-    }
-  }, [updatingTrackID, todos]);
+  // useEffect(() => {
+  //   console.log(updatingTrackID);
+  //   if (updatingTrackID) {
+  //     const taskToUpdate = todos.find((todo) => todo.id === updatingTrackID);
+  //     if (taskToUpdate) {
+  //       console.log("updating task to:", taskToUpdate.text);
+  //       setText(taskToUpdate.text);
+  //     }
+  //   } else {
+  //     // reset the input value
+  //     setText("");
+  //   }
+  // }, [updatingTrackID, todos]);
 
   //toggle handle submit between add and update
   const handleSubmit = (e) => {
@@ -34,7 +35,7 @@ const TodoInput = () => {
       console.log("update text to:", text);
       dispatch(updateTodo({ id: updatingTrackID, text }));
     } else {
-      dispatch(addTodo({ id: Date.now(), text, completed: false }));
+      dispatch(addTodo({ id: uuidv4(), text, completed: false }));
     }
     setText("");
   };
