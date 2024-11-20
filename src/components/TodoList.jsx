@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTodos, deleteTodo } from "../redux/async/todos/todoAction";
+import {
+  fetchTodos,
+  deleteTodo,
+  toggleTodo,
+  toggleUpdate,
+} from "../redux/async/todos/todoAction";
 
 const TodoList = () => {
   const { todos, loading, error, isSuccess } = useSelector(
@@ -8,7 +13,7 @@ const TodoList = () => {
   );
   const dispatch = useDispatch();
 
-  //get data first time
+  //get data first time, on mount
   useEffect(() => {
     dispatch(fetchTodos());
   }, [dispatch]);
@@ -18,7 +23,7 @@ const TodoList = () => {
     if (isSuccess) {
       dispatch(fetchTodos());
     }
-  }, [isSuccess]);
+  }, [isSuccess, dispatch]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -56,9 +61,9 @@ const TodoList = () => {
             </button>
             <button
               className="btn btn-info btn-sm mx-1"
-              onClick={() => dispatch(toggleTodo(todo.id))}
+              onClick={() => dispatch(toggleTodo(todo.id, todo.completed))}
             >
-              Done
+              {todo.completed ? "Undo" : "Done"}
             </button>
             <button
               className="btn btn-warning btn-sm mx-1"

@@ -10,6 +10,7 @@ import {
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
   PROCESS_TODO_SUCCESS,
+  TOGGLE_UPDATE,
 } from "./todoAction";
 
 //store the todos in the state
@@ -49,6 +50,13 @@ const todoReducer = (state = initialState, action) => {
         ...state,
         isSuccess: true,
       };
+
+    case TOGGLE_UPDATE:
+      return {
+        ...state,
+        updateTrackId: action.payload,
+      };
+
     //default must be defined, if not it will throw an error
     default:
       return state;
