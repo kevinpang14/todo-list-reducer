@@ -7,13 +7,14 @@ export const FETCH_TODOS_FAILURE = "FETCH_TODOS_FAILURE";
 export const PROCESS_TODO_SUCCESS = "PROCESS_TODO_SUCCESS";
 export const TOGGLE_UPDATE = "TOGGLE_UPDATE";
 
+const API_URL = import.meta.env.VITE_API_URL;
 // action creator
 //fetch todos
 export const fetchTodos = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_TODOS_REQUEST });
     try {
-      const response = await axios.get("http://localhost:3000/todos");
+      const response = await axios.get(API_URL);
       const data = await response.data;
       //if success then dispatch the data
       dispatch({ type: FETCH_TODOS_SUCCESS, payload: data });
@@ -28,7 +29,7 @@ export const deleteTodo = (id) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_TODOS_REQUEST });
     try {
-      await axios.delete(`http://localhost:3000/todos/${id}`);
+      await axios.delete(`${API_URL}/${id}`);
       //if delete success then dispatch the success message
       dispatch({ type: PROCESS_TODO_SUCCESS });
     } catch (error) {
@@ -42,7 +43,7 @@ export const addTodo = (data) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_TODOS_REQUEST });
     try {
-      await axios.post(`http://localhost:3000/todos`, data);
+      await axios.post(API_URL, data);
       //if delete success then dispatch the success message
       dispatch({ type: PROCESS_TODO_SUCCESS });
     } catch (error) {
@@ -57,7 +58,7 @@ export const fetchTodosById = (id) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_TODOS_REQUEST });
     try {
-      const response = await axios.get(`http://localhost:3000/todos/${id}`);
+      const response = await axios.get(`${API_URL}/${id}`);
       const data = await response.data;
       return data;
     } catch (error) {
@@ -75,7 +76,7 @@ export const updateTodo = (id, updatedData) => {
         const todo = getState().todoRed.todos.find((todo) => todo.id === id);
         const updatedTodo = { ...todo, ...updatedData };
 
-        await axios.put(`http://localhost:3000/todos/${id}`, updatedTodo);
+        await axios.put(`${API_URL}/${id}`, updatedTodo);
         //if update success then dispatch the success message
         dispatch({ type: PROCESS_TODO_SUCCESS });
       } catch (error) {
@@ -91,7 +92,7 @@ export const toggleTodo = (id, currentCompleted) => {
     dispatch({ type: FETCH_TODOS_REQUEST });
     try {
       const updatedData = { completed: !currentCompleted };
-      await axios.patch(`http://localhost:3000/todos/${id}`, updatedData);
+      await axios.patch(`${API_URL}/${id}`, updatedData);
       //if update success then dispatch the success message
       dispatch({ type: PROCESS_TODO_SUCCESS });
     } catch (error) {
